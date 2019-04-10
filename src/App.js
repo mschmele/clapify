@@ -1,28 +1,54 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+function App() {
+  const [phrase, setPhrase] = useState("");
+  const [result, setResult] = useState(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setResult(
+      phrase
+        .toUpperCase()
+        .split(" ")
+        .join("👏")
     );
   }
+
+  async function copyResult() {
+    await navigator.clipboard.writeText(result);
+
+    alert("Copied text to clipboard");
+  }
+
+  return (
+    <div className="app">
+      <h1>Clapify</h1>
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input
+            type="text"
+            name="phrase"
+            placeholder="Enter some stuff to clapify"
+            value={phrase}
+            onChange={e => setPhrase(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <input type="submit" value="Clapify me, Cap'n" />
+        </div>
+      </form>
+
+      {result ? (
+        <>
+          <p>{result}</p>
+          <button onClick={copyResult}>Copy Text</button>
+        </>
+      ) : null}
+    </div>
+  );
 }
 
 export default App;
